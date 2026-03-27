@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Dino 遊戲說明文件</title>
+  <style>
+    :root {
+      --bg: #0f0f0a;
+      --surface: #1a1a10;
+      --surface2: #252515;
+      --border: #3a3a1a;
+      --accent: #fca311;
+      --accent2: #e8630a;
+      --green: #44cc77;
+      --red: #ee4455;
+      --blue: #44aaff;
+      --purple: #aa77ff;
+      --text: #e8e4d0;
+      --muted: #8a8468;
+      --code-bg: #0d0d08;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, #0a0a05 0%, #1a1505 50%, #0f0a00 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 52px 40px 44px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(252,163,17,0.12) 0%, transparent 65%);
+    }
+    header h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #fff;
+      position: relative;
+    }
+    header h1 span { color: var(--accent); }
+    header p {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      position: relative;
+    }
+    .badges { margin-top: 18px; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; position: relative; }
+    .badge {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      border: 1px solid;
+    }
+    .badge-gold   { border-color: var(--accent);  color: var(--accent); }
+    .badge-orange { border-color: var(--accent2); color: var(--accent2); }
+    .badge-green  { border-color: var(--green);   color: var(--green); }
+    .badge-blue   { border-color: var(--blue);    color: var(--blue); }
+    .badge-purple { border-color: var(--purple);  color: var(--purple); }
+
+    /* ── Nav ── */
+    nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
+      display: flex;
+      gap: 2px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    nav a {
+      display: block;
+      padding: 14px 16px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    nav a:hover { color: var(--text); border-bottom-color: var(--accent); }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 52px 40px;
+    }
+    section { margin-bottom: 64px; }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h2 .ico {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      background: var(--surface2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.15rem;
+      flex-shrink: 0;
+    }
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin: 28px 0 12px;
+    }
+    p { color: var(--text); margin-bottom: 12px; }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── Cards ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px;
+      transition: border-color 0.2s;
+    }
+    .card:hover { border-color: var(--accent); }
+    .card .ico { font-size: 1.8rem; margin-bottom: 10px; }
+    .card h4 { font-size: 0.95rem; font-weight: 600; color: #fff; margin-bottom: 6px; }
+    .card p { font-size: 0.84rem; color: var(--muted); margin: 0; }
+    .card .num { font-size: 1.9rem; font-weight: 700; color: var(--accent); }
+
+    /* ── Code ── */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-size: 0.86rem;
+      line-height: 1.65;
+      margin: 14px 0;
+    }
+    code { font-family: 'Cascadia Code','Fira Code','Consolas',monospace; color: #ccc9b5; }
+    pre code { background: none; padding: 0; }
+    .kw  { color: #cc99dd; }
+    .fn  { color: #66bbff; }
+    .str { color: #88cc66; }
+    .num { color: #ffaa55; }
+    .cm  { color: #555540; font-style: italic; }
+    .prop{ color: var(--accent); }
+    .type{ color: #ffdd88; }
+    .cls { color: #ff9955; }
+
+    /* ── Architecture diagram ── */
+    .arch {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .arch-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+    .arch-box.center { border-color: var(--accent); }
+    .arch-box .aname { font-size: 0.85rem; font-weight: 600; color: #fff; margin-bottom: 4px; }
+    .arch-box .adesc { font-size: 0.75rem; color: var(--muted); }
+
+    /* ── Game loop flow ── */
+    .loop-flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 20px 0;
+    }
+    .loop-step {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      text-align: center;
+      min-width: 110px;
+    }
+    .loop-step .ls { font-size: 0.72rem; color: var(--muted); margin-bottom: 3px; }
+    .loop-step .lv { font-size: 0.88rem; font-weight: 600; color: #fff; }
+    .loop-step.hi { border-color: var(--accent); }
+    .loop-step.hi .lv { color: var(--accent); }
+    .arr { color: var(--muted); font-size: 1.2rem; padding: 0 2px; }
+
+    /* ── Speed table ── */
+    .speed-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    .speed-table th {
+      background: var(--surface2);
+      padding: 10px 16px;
+      text-align: left;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .speed-table td {
+      padding: 11px 16px;
+      border-top: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .speed-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .speed-table .sv  { color: var(--accent); font-family: monospace; font-weight: 700; }
+    .speed-table .jv  { color: var(--green);  font-family: monospace; }
+    .speed-table .gv  { color: var(--blue);   font-family: monospace; }
+    .speed-pill {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .sp1 { background: rgba(68,204,119,0.15); color: var(--green); border: 1px solid rgba(68,204,119,0.3); }
+    .sp2 { background: rgba(252,163,17,0.15); color: var(--accent); border: 1px solid rgba(252,163,17,0.3); }
+    .sp3 { background: rgba(232,99,10,0.15);  color: var(--accent2); border: 1px solid rgba(232,99,10,0.3); }
+    .sp4 { background: rgba(238,68,85,0.15);  color: var(--red); border: 1px solid rgba(238,68,85,0.3); }
+
+    /* ── Score table ── */
+    .score-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+    .score-row .sr-lvl {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    .score-row .sr-info { flex: 1; }
+    .score-row .sr-title { font-weight: 600; color: #fff; font-size: 0.9rem; }
+    .score-row .sr-desc  { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
+    .score-row .sr-val   { font-family: monospace; font-size: 0.88rem; color: var(--accent); white-space: nowrap; }
+
+    /* ── Pool diagram ── */
+    .pool-diagram {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      gap: 16px;
+      align-items: center;
+      margin: 20px 0;
+    }
+    .pool-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .pool-box h4 { font-size: 0.88rem; font-weight: 600; color: #fff; margin-bottom: 10px; }
+    .pool-items { display: flex; flex-wrap: wrap; gap: 5px; }
+    .pool-item {
+      width: 28px; height: 28px;
+      border-radius: 4px;
+      border: 1px solid;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem;
+    }
+    .pi-free { border-color: rgba(68,204,119,0.4); color: var(--green); background: rgba(68,204,119,0.07); }
+    .pi-used { border-color: rgba(252,163,17,0.4); color: var(--accent); background: rgba(252,163,17,0.07); }
+    .pool-arrows { text-align: center; color: var(--muted); font-size: 1.4rem; }
+
+    /* ── Asset list ── */
+    .asset-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 8px;
+      margin: 14px 0;
+    }
+    .asset-chip {
+      padding: 8px 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.82rem;
+      text-align: center;
+    }
+    .asset-chip .ac-icon { font-size: 1.3rem; margin-bottom: 4px; }
+    .asset-chip .ac-name { color: var(--text); font-weight: 500; }
+    .asset-chip .ac-count { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+
+    /* ── Key bindings ── */
+    .keybind-list { display: flex; flex-direction: column; gap: 8px; }
+    .kb-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .kb-key {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 48px;
+      padding: 4px 8px;
+      background: var(--surface2);
+      border: 1px solid #555;
+      border-bottom: 3px solid #333;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-family: monospace;
+      color: var(--text);
+      flex-shrink: 0;
+    }
+    .kb-desc { font-size: 0.88rem; color: var(--text); }
+    .kb-detail { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+    /* ── Alert ── */
+    .alert {
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 0.87rem;
+      margin: 14px 0;
+      display: flex;
+      gap: 12px;
+    }
+    .alert-gold { background: rgba(252,163,17,0.08); border: 1px solid rgba(252,163,17,0.25); color: #f5e0a8; }
+    .alert-blue { background: rgba(68,170,255,0.08); border: 1px solid rgba(68,170,255,0.25); color: #a8d0f5; }
+    .alert-green{ background: rgba(68,204,119,0.08); border: 1px solid rgba(68,204,119,0.25); color: #a8f5c0; }
+
+    /* ── Inline code ── */
+    .ic {
+      display: inline-block;
+      padding: 1px 7px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.85em;
+      color: var(--accent);
+    }
+
+    /* ── Manager table ── */
+    .mgr-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .mgr-table th {
+      background: var(--surface2);
+      padding: 10px 14px;
+      text-align: left;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .mgr-table td { padding: 11px 14px; border-top: 1px solid var(--border); vertical-align: top; }
+    .mgr-table tr:hover td { background: rgba(255,255,255,0.015); }
+    .mgr-table .mn { font-family: monospace; color: var(--accent); font-weight: 600; }
+    .mgr-table .mv { font-family: monospace; font-size: 0.82rem; color: var(--blue); }
+    .mgr-table .md { color: var(--muted); font-size: 0.84rem; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 32px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    @media (max-width: 640px) {
+      header { padding: 36px 20px; }
+      header h1 { font-size: 1.8rem; }
+      .container { padding: 36px 20px; }
+      nav { padding: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🦖 <span>3D Dino</span> 遊戲說明文件</h1>
+  <p>Yating+game+dino2 — 3D 體素恐龍跑酷遊戲技術說明</p>
+  <div class="badges">
+    <span class="badge badge-gold">Three.js</span>
+    <span class="badge badge-orange">.vox 體素模型</span>
+    <span class="badge badge-green">Howler.js 音效</span>
+    <span class="badge badge-blue">Nebula 粒子</span>
+    <span class="badge badge-purple">MQTT / WebRTC 控制</span>
+  </div>
+</header>
+
+<nav>
+  <a href="#overview">概覽</a>
+  <a href="#architecture">架構</a>
+  <a href="#gameloop">遊戲迴圈</a>
+  <a href="#managers">管理器</a>
+  <a href="#player">玩家物理</a>
+  <a href="#enemy">敵人池</a>
+  <a href="#score">分數系統</a>
+  <a href="#input">輸入控制</a>
+  <a href="#assets">資產清單</a>
+  <a href="#renderer">渲染設定</a>
+  <a href="#audio">音效</a>
+  <a href="#particles">粒子效果</a>
+</nav>
+
+<div class="container">
+
+  <!-- ── Overview ── -->
+  <section id="overview">
+    <h2><span class="ico">🎮</span> 遊戲概覽</h2>
+    <p>
+      3D Dino 是以 <strong>Three.js</strong> 建構的 3D 體素風格恐龍跑酷遊戲，
+      靈感源自 Chrome 離線小恐龍，但加入了完整的三維場景、
+      動態光影、粒子特效，以及透過 <strong>MQTT / WebRTC DataChannel</strong> 接收體感控制指令。
+    </p>
+    <p>
+      遊戲嵌入在更大的「遊戲中心（index.html）」中，是四款遊戲之一，
+      與「憤怒火箭」、「彈珠彈射」、「AI 聊天室」並列於選單。
+    </p>
+
+    <div class="card-grid" style="margin-top: 24px;">
+      <div class="card">
+        <div class="ico">🧊</div>
+        <div class="num">100+</div>
+        <h4>.vox 體素模型</h4>
+        <p>T-Rex、仙人掌、翼龍、雜項裝飾，全部使用 MagicaVoxel 格式。</p>
+      </div>
+      <div class="card">
+        <div class="ico">⚡</div>
+        <div class="num">4</div>
+        <h4>速度等級</h4>
+        <p>從速度 15 到 35，每得 100 分加速一次，同步調整跳躍物理。</p>
+      </div>
+      <div class="card">
+        <div class="ico">🦕</div>
+        <div class="num">50+15</div>
+        <h4>敵人物件池</h4>
+        <p>仙人掌 50 個 + 翼龍 15 個預先生成，循環重用，零 GC 壓力。</p>
+      </div>
+      <div class="card">
+        <div class="ico">🎵</div>
+        <div class="num">5</div>
+        <h4>音效類型</h4>
+        <p>跳躍、得分、新高分、背景音樂，使用 Howler.js 管理。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Architecture ── -->
+  <section id="architecture">
+    <h2><span class="ico">🏗️</span> 整體架構</h2>
+    <p>遊戲由多個全域單例管理器組成，透過全域變數互相調用：</p>
+
+    <div class="arch" style="margin-top: 20px;">
+      <div class="arch-box">
+        <div class="aname">config</div>
+        <div class="adesc">渲染/攝影機<br>全域設定</div>
+      </div>
+      <div class="arch-box">
+        <div class="aname">LoadManager</div>
+        <div class="adesc">資產依賴樹<br>非同步載入</div>
+      </div>
+      <div class="arch-box center">
+        <div class="aname">GameManager ★</div>
+        <div class="adesc">主控循環<br>start/stop/pause</div>
+      </div>
+      <div class="arch-box">
+        <div class="aname">PlayerManager</div>
+        <div class="adesc">跳躍物理<br>動畫幀</div>
+      </div>
+      <div class="arch-box">
+        <div class="aname">EnemyManager</div>
+        <div class="adesc">Pool + Buffer<br>碰撞偵測</div>
+      </div>
+      <div class="arch-box">
+        <div class="aname">NatureManager</div>
+        <div class="adesc">地面/水面<br>裝飾物件</div>
+      </div>
+      <div class="arch-box">
+        <div class="aname">ScoreManager</div>
+        <div class="adesc">分數/等級<br>localStorage</div>
+      </div>
+      <div class="arch-box">
+        <div class="aname">InputManager</div>
+        <div class="adesc">鍵盤狀態<br>Callback 系統</div>
+      </div>
+      <div class="arch-box">
+        <div class="aname">AudioManager</div>
+        <div class="adesc">Howler.js<br>音效播放</div>
+      </div>
+    </div>
+
+    <h3>全域變數對應</h3>
+    <table class="mgr-table">
+      <thead>
+        <tr><th>變數名</th><th>類別</th><th>說明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="mn">game</td>   <td class="mv">GameManager</td>  <td class="md">主控制器，協調所有其他管理器</td></tr>
+        <tr><td class="mn">player</td> <td class="mv">PlayerManager</td><td class="md">玩家（T-Rex）物理與動畫</td></tr>
+        <tr><td class="mn">enemy</td>  <td class="mv">EnemyManager</td> <td class="md">仙人掌 / 翼龍生成與碰撞</td></tr>
+        <tr><td class="mn">nature</td> <td class="mv">NatureManager</td><td class="md">地面、水面、裝飾植被</td></tr>
+        <tr><td class="mn">score</td>  <td class="mv">ScoreManager</td> <td class="md">分數計算與 Canvas 渲染</td></tr>
+        <tr><td class="mn">input</td>  <td class="mv">InputManager</td> <td class="md">鍵盤/觸控狀態管理</td></tr>
+        <tr><td class="mn">audio</td>  <td class="mv">AudioManager</td> <td class="md">Howler.js 音效播放器</td></tr>
+        <tr><td class="mn">load_manager</td><td class="mv">LoadManager</td><td class="md">.vox 資產載入與依賴管理</td></tr>
+        <tr><td class="mn">scene</td>  <td class="mv">THREE.Scene</td>  <td class="md">Three.js 場景根節點</td></tr>
+        <tr><td class="mn">camera</td> <td class="mv">THREE.PerspectiveCamera</td><td class="md">FOV 45，固定斜角視角</td></tr>
+        <tr><td class="mn">renderer</td><td class="mv">THREE.WebGLRenderer</td><td class="md">WebGL 渲染器，支援陰影 / 後處理</td></tr>
+        <tr><td class="mn">clock</td>  <td class="mv">THREE.Clock</td>  <td class="md">主時鐘，提供 timeDelta</td></tr>
+        <tr><td class="mn">nebulaSystem</td><td class="mv">Nebula.System</td><td class="md">粒子系統（腳步塵土）</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ── Game Loop ── -->
+  <section id="gameloop">
+    <h2><span class="ico">🔄</span> 遊戲迴圈</h2>
+    <p>
+      遊戲使用 <strong>requestAnimationFrame</strong> 驅動，每幀調用
+      <span class="ic">game.render()</span> 更新所有子系統，並在 timeDelta &gt; 0.15s
+      時強制夾住（防止分頁切換後大步跳躍）。
+    </p>
+
+    <div class="loop-flow">
+      <div class="loop-step"><div class="ls">每幀</div><div class="lv">rAF 觸發</div></div>
+      <div class="arr">→</div>
+      <div class="loop-step hi"><div class="ls">主函式</div><div class="lv">game.render()</div></div>
+      <div class="arr">→</div>
+      <div class="loop-step"><div class="ls">玩家</div><div class="lv">player.update()</div></div>
+      <div class="arr">→</div>
+      <div class="loop-step"><div class="ls">敵人</div><div class="lv">enemy.update()</div></div>
+      <div class="arr">→</div>
+      <div class="loop-step"><div class="ls">自然</div><div class="lv">nature.update()</div></div>
+      <div class="arr">→</div>
+      <div class="loop-step"><div class="ls">輸入</div><div class="lv">input.update()</div></div>
+      <div class="arr">→</div>
+      <div class="loop-step"><div class="ls">粒子</div><div class="lv">nebula.update()</div></div>
+      <div class="arr">→</div>
+      <div class="loop-step hi"><div class="ls">渲染</div><div class="lv">renderer.render()</div></div>
+      <div class="arr">→</div>
+      <div class="loop-step"><div class="ls">分數</div><div class="lv">score.update()</div></div>
+    </div>
+
+<pre><code><span class="cls">GameManager</span>.loop() {
+  <span class="kw">if</span> (!<span class="kw">this</span>.isPlaying) <span class="kw">return</span>;     <span class="cm">// 停止條件</span>
+
+  <span class="fn">requestAnimationFrame</span>(() => game.<span class="fn">loop</span>());
+  <span class="kw">this</span>.<span class="fn">render</span>();
+}
+
+<span class="cls">GameManager</span>.render() {
+  <span class="kw">let</span> timeDelta = clock.<span class="fn">getDelta</span>();
+  <span class="kw">if</span> (timeDelta > <span class="num">0.15</span>) timeDelta = <span class="num">0.15</span>; <span class="cm">// 夾住防止大步跳躍</span>
+
+  player.<span class="fn">update</span>(timeDelta);
+  enemy.<span class="fn">update</span>(timeDelta);
+  nature.<span class="fn">update</span>(timeDelta);
+  input.<span class="fn">update</span>();
+  effects.<span class="fn">update</span>(timeDelta);
+  nebulaSystem.<span class="fn">update</span>();
+
+  renderer.<span class="fn">render</span>(scene, camera);
+  score.<span class="fn">update</span>(timeDelta);
+}
+</code></pre>
+
+    <h3>遊戲狀態機</h3>
+    <div class="arch" style="grid-template-columns: repeat(5, 1fr); max-width: 700px;">
+      <div class="arch-box"><div class="aname">IDLE</div><div class="adesc">載入完成<br>等待按鍵</div></div>
+      <div style="display:flex;align-items:center;justify-content:center;color:var(--muted)">→</div>
+      <div class="arch-box center"><div class="aname">PLAYING</div><div class="adesc">isPlaying=true<br>遊戲進行中</div></div>
+      <div style="display:flex;align-items:center;justify-content:center;color:var(--muted)">⇄</div>
+      <div class="arch-box"><div class="aname">PAUSED</div><div class="adesc">isPaused=true<br>分頁隱藏時</div></div>
+    </div>
+    <p style="margin-top: 12px; font-size: 0.85rem; color: var(--muted);">
+      碰撞觸發 → <span class="ic">game.stop()</span> → IDLE（等待重新開始）
+    </p>
+  </section>
+
+  <!-- ── Managers ── -->
+  <section id="managers">
+    <h2><span class="ico">⚙️</span> 各管理器功能</h2>
+
+    <h3>LoadManager — 資產依賴樹</h3>
+    <p>
+      所有 .vox 模型、貼圖都透過 <span class="ic">LoadManager</span> 管理，
+      支援<strong>依賴關係</strong>（dep）：若資產 A 需要等資產 B 載入後才能處理，
+      設定 deps 陣列即可自動等待。
+    </p>
+<pre><code><span class="cm">// 設定資產載入器（含依賴）</span>
+load_manager.<span class="fn">set_loader</span>(<span class="str">'cactus'</span>, [<span class="str">'ground'</span>], () => {
+  <span class="cm">// 等 ground 載入完後才執行此 callback</span>
+  <span class="fn">loadVoxModel</span>(<span class="str">'dino3d/objects/cactus/cactus.vox'</span>, mesh => {
+    load_manager.<span class="fn">set_vox</span>(<span class="str">'cactus'</span>, mesh);
+    load_manager.<span class="fn">set_status</span>(<span class="str">'cactus'</span>, <span class="kw">true</span>);
+  });
+});
+
+<span class="cm">// 一次載入全部（含進度回調）</span>
+load_manager.<span class="fn">load_all</span>(
+  () => { <span class="cm">/* 全部完成 */</span> },
+  () => { <span class="kw">let</span> p = load_manager.<span class="fn">getLoadPercentage</span>(); }
+);
+</code></pre>
+
+    <h3>NatureManager — 場景分層系統</h3>
+    <p>地面場景分為多個「層級（level）」，各層在不同 Z 深度、Y 高度生成不同裝飾物：</p>
+    <table class="mgr-table">
+      <thead>
+        <tr><th>層級</th><th>Z 間距</th><th>生成物種</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="mn">playground</td><td class="mv">z_dist: 5</td><td class="md">骷髏頭、岩石、花朵</td></tr>
+        <tr><td class="mn">first</td>     <td class="mv">z_dist: 5</td><td class="md">風滾草、仙人掌、骷髏頭、蠍子、岩石、花朵</td></tr>
+        <tr><td class="mn">second</td>    <td class="mv">z_dist: 10</td><td class="md">風滾草、骷髏頭、蠍子、岩石、花朵、樹木</td></tr>
+        <tr><td class="mn">third</td>     <td class="mv">z_dist: 30</td><td class="md">風滾草、樹木（遠景）</td></tr>
+        <tr><td class="mn">water</td>     <td class="mv">z_dist: 20</td><td class="md">魚類（水面下）</td></tr>
+        <tr><td class="mn">water2</td>    <td class="mv">z_dist: 10</td><td class="md">水草、岩石</td></tr>
+        <tr><td class="mn">empty</td>     <td class="mv">z_dist: 10</td><td class="md">骷髏頭、花朵、岩石、風滾草</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ── Player ── -->
+  <section id="player">
+    <h2><span class="ico">🦖</span> 玩家物理系統</h2>
+    <p>
+      玩家（T-Rex）使用<strong>速度 + 重力積分</strong>模擬跳躍，
+      每幀根據 timeDelta 更新 Y 座標：
+    </p>
+
+<pre><code><span class="cm">// 跳躍物理（每幀執行）</span>
+frame.position.y += frame.vel * timeDelta;
+frame.vel        += frame.gravity * timeDelta;   <span class="cm">// gravity 為負值</span>
+
+<span class="cm">// 落地判斷</span>
+<span class="kw">if</span> (frame.position.y <= frame.init_y) {
+  jump.is_active = <span class="kw">false</span>;
+  frame.position.y = frame.init_y;   <span class="cm">// 強制修正至地面</span>
+}
+</code></pre>
+
+    <h3>跳躍增強（Boost）</h3>
+    <p>
+      按住空白鍵超過 <strong>0.20 秒</strong>後，跳躍速度乘以 boost.vel，重力切換為 boost.gravity，
+      實現「長按飛得更高」效果：
+    </p>
+<pre><code><span class="kw">if</span> (!frame.boost && keys.space.down && spaceHeld > <span class="num">0.20</span>) {
+  frame.vel     = frame.vel * jump.boost.vel;    <span class="cm">// × 1.1 ~ 1.5（依速度等級）</span>
+  frame.gravity = jump.boost.gravity;            <span class="cm">// -30 ~ -70（依速度等級）</span>
+  frame.boost   = <span class="kw">true</span>;
+}
+</code></pre>
+
+    <h3>快速下墜（Fast Fall）</h3>
+    <p>跳躍中按下方向鍵（Down/Ctrl），重力每幀乘以 1.1，快速墜落並改用蜷縮（band）幀動畫：</p>
+<pre><code><span class="kw">if</span> (keys.down.down && !block_fall_fast) {
+  frame.gravity *= <span class="num">1.1</span>;              <span class="cm">// 加速下墜</span>
+  frame.geometry = frames_band[...]; <span class="cm">// 切換至蜷縮姿勢</span>
+  collisionBox.scale.y = <span class="num">0.5</span>;       <span class="cm">// 碰撞箱縮小</span>
+}
+</code></pre>
+
+    <h3>碰撞箱（CollisionBox）</h3>
+    <p>
+      碰撞使用不可見的 <span class="ic">THREE.BoxGeometry(0.5, 1.7, 0.7)</span>，
+      依姿勢動態調整：
+    </p>
+    <table class="mgr-table">
+      <thead><tr><th>狀態</th><th>scale.y</th><th>scale.z</th><th>pos.y 偏移</th></tr></thead>
+      <tbody>
+        <tr><td class="mn">站立</td><td class="mv">1.0</td><td class="mv">1.0</td><td class="md">+ 1.4</td></tr>
+        <tr><td class="mn">蜷縮（地面）</td><td class="mv">0.5</td><td class="mv">2.5</td><td class="md">+ 0.7</td></tr>
+        <tr><td class="mn">快速下墜</td><td class="mv">0.5</td><td class="mv">2.5</td><td class="md">+ 0.8（更低）</td></tr>
+      </tbody>
+    </table>
+
+    <h3>動畫幀切換速度</h3>
+    <p>
+      奔跑動畫速度與遊戲速度同步，速度越快恐龍腳步越快：
+    </p>
+<pre><code><span class="cm">// anim_speed 隨速度動態計算</span>
+<span class="kw">this</span>.anim_speed = <span class="num">0.18</span> / (enemy.config.vel / <span class="num">2</span>);
+</code></pre>
+  </section>
+
+  <!-- ── Enemy ── -->
+  <section id="enemy">
+    <h2><span class="ico">🌵</span> 敵人系統（物件池）</h2>
+    <p>
+      為避免頻繁建立/銷毀 Three.js Mesh（GC 抖動），
+      敵人系統採用 <strong>Pool + Buffer 雙層設計</strong>：
+    </p>
+
+    <div class="pool-diagram">
+      <div class="pool-box">
+        <h4>Pool（預先建立）</h4>
+        <p style="font-size:0.8rem;color:var(--muted);margin-bottom:10px;">仙人掌 50 組 + 翼龍 15 組</p>
+        <div class="pool-items">
+          <div class="pi-free">🌵</div><div class="pi-free">🌵</div><div class="pi-free">🌵</div>
+          <div class="pi-used">🌵</div><div class="pi-used">🌵</div><div class="pi-used">🌵</div>
+          <div class="pi-free">🌵</div><div class="pi-free">🌵</div><div class="pi-free">🌵</div>
+          <div class="pi-used">🌵</div><div class="pi-used">🌵</div><div class="pi-used">🌵</div>
+          <div class="pi-free">🦕</div><div class="pi-free">🦕</div><div class="pi-used">🦕</div>
+        </div>
+        <p style="font-size:0.75rem;margin-top:8px;">
+          <span style="color:var(--green)">■</span> 可用 &nbsp;
+          <span style="color:var(--accent)">■</span> 使用中
+        </p>
+      </div>
+      <div class="pool-arrows">⇄<br><span style="font-size:0.7rem;color:var(--muted)">借用/歸還</span></div>
+      <div class="pool-box">
+        <h4>Buffer（同時顯示）</h4>
+        <p style="font-size:0.8rem;color:var(--muted);margin-bottom:10px;">最多 10 組同時在場上</p>
+        <div class="pool-items">
+          <div class="pi-used">🌵</div><div class="pi-used">🌵</div><div class="pi-used">🌵</div>
+          <div class="pi-used">🦕</div><div class="pi-used">🌵</div><div class="pi-used">🌵</div>
+          <div class="pi-used">🌵</div><div class="pi-used">🌵</div><div class="pi-used">🌵</div>
+          <div class="pi-used">🌵</div>
+        </div>
+        <p style="font-size:0.75rem;margin-top:8px;">超出 remove_z=25 時自動歸還池</p>
+      </div>
+    </div>
+
+    <h3>仙人掌群組（Cactus Group）</h3>
+    <p>
+      每組仙人掌由 1 個主體 + 最多 2 個「尾隨」（tail）組成，
+      尾隨仙人掌體積較小，緊靠在主體後方：
+    </p>
+<pre><code><span class="cm">// 100% 機率生成第一個尾隨</span>
+<span class="cm">// 25% 機率再生成第二個尾隨</span>
+<span class="kw">if</span> (Math.<span class="fn">random</span>() * <span class="num">100</span> < <span class="num">100</span>) enemiesGroup.<span class="fn">push</span>(<span class="fn">createEnemy</span>(<span class="str">'cactus'</span>, <span class="kw">true</span>, <span class="num">0</span>));
+<span class="kw">if</span> (Math.<span class="fn">random</span>() * <span class="num">100</span> < <span class="num">25</span>)  enemiesGroup.<span class="fn">push</span>(<span class="fn">createEnemy</span>(<span class="str">'cactus'</span>, <span class="kw">true</span>, <span class="num">1</span>));
+</code></pre>
+
+    <h3>翼龍（Ptero）特性</h3>
+    <ul style="padding-left: 20px; color: var(--muted); font-size: 0.88rem; line-height: 2;">
+      <li>分數達 <strong>400</strong> 時開始生成</li>
+      <li>隨機出現在三個高度（地面 / +1.3 / +3.5）</li>
+      <li>Z 位置 &gt; <span class="ic">ptero_z_speedup = -35</span> 時速度提升 1.7 倍（快速逼近）</li>
+      <li>每 0.10 秒切換一幀動畫（共 6 幀拍翅）</li>
+    </ul>
+
+    <h3>碰撞偵測</h3>
+<pre><code><span class="cm">// 使用 Three.js Box3 AABB 碰撞</span>
+<span class="kw">let</span> eBox = <span class="kw">new</span> <span class="type">THREE.Box3</span>().<span class="fn">setFromObject</span>(enemy[j]);
+<span class="kw">let</span> pBox = <span class="kw">new</span> <span class="type">THREE.Box3</span>().<span class="fn">setFromObject</span>(player.collisionBox);
+
+<span class="kw">if</span> (eBox.<span class="fn">intersectsBox</span>(pBox) && enemy[j].visible) {
+  game.<span class="fn">stop</span>(); <span class="cm">// 碰撞 → 遊戲結束</span>
+}
+</code></pre>
+  </section>
+
+  <!-- ── Score ── -->
+  <section id="score">
+    <h2><span class="ico">📊</span> 分數與等級系統</h2>
+    <p>
+      分數以 <span class="ic">add_vel × timeDelta</span> 每幀疊加，每 100 分觸發一次
+      <span class="ic">flash()</span>（加速 + 音效 + 分數閃爍）。
+      最高分儲存於 <span class="ic">localStorage</span>。
+    </p>
+
+    <div class="score-row">
+      <div class="sr-lvl" style="background: rgba(68,204,119,0.15); color: var(--green); border: 1px solid rgba(68,204,119,0.3);">0</div>
+      <div class="sr-info">
+        <div class="sr-title">開始 — 得分 400</div>
+        <div class="sr-desc">add_vel = 10 分/秒，只有仙人掌，每 100 分加速一次</div>
+      </div>
+      <div class="sr-val">vel: 10/s</div>
+    </div>
+    <div class="score-row">
+      <div class="sr-lvl" style="background: rgba(252,163,17,0.15); color: var(--accent); border: 1px solid rgba(252,163,17,0.3);">1</div>
+      <div class="sr-info">
+        <div class="sr-title">分數 400 — 翼龍登場</div>
+        <div class="sr-desc">enemy.spawnPteros() — 將 15 隻翼龍加入 Pool，開始混入仙人掌</div>
+      </div>
+      <div class="sr-val">vel: 10/s</div>
+    </div>
+    <div class="score-row">
+      <div class="sr-lvl" style="background: rgba(232,99,10,0.15); color: var(--accent2); border: 1px solid rgba(232,99,10,0.3);">2</div>
+      <div class="sr-info">
+        <div class="sr-title">分數 1000 — 得分加速</div>
+        <div class="sr-desc">add_vel 提升為 20/s，分數累積速度翻倍</div>
+      </div>
+      <div class="sr-val">vel: 20/s</div>
+    </div>
+    <div class="score-row">
+      <div class="sr-lvl" style="background: rgba(238,68,85,0.15); color: var(--red); border: 1px solid rgba(238,68,85,0.3);">3</div>
+      <div class="sr-info">
+        <div class="sr-title">分數 3000 — 高速模式</div>
+        <div class="sr-desc">add_vel 提升為 40/s，遊戲速度趨近上限 35</div>
+      </div>
+      <div class="sr-val">vel: 40/s</div>
+    </div>
+
+    <h3>速度等級表</h3>
+    <p>每次 <span class="ic">flash()</span> 調用 <span class="ic">enemy.increase_velocity(1)</span>，跳躍物理同步調整：</p>
+    <table class="speed-table">
+      <thead>
+        <tr><th>速度等級</th><th>enemy.vel 範圍</th><th>跳躍初速 (vel)</th><th>重力 (gravity)</th><th>Boost 乘數</th><th>粒子速度</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="speed-pill sp1">Level 1</span></td>
+          <td class="sv">&lt; 10</td>
+          <td class="jv">15</td>
+          <td class="gv">-37</td>
+          <td>×1.1 / -30g</td>
+          <td>spd=4（預設）</td>
+        </tr>
+        <tr>
+          <td><span class="speed-pill sp2">Level 2</span></td>
+          <td class="sv">10 ~ 20</td>
+          <td class="jv">19</td>
+          <td class="gv">-60</td>
+          <td>×1.1 / -40g</td>
+          <td>spd=7</td>
+        </tr>
+        <tr>
+          <td><span class="speed-pill sp3">Level 3</span></td>
+          <td class="sv">20 ~ 30</td>
+          <td class="jv">25</td>
+          <td class="gv">-100</td>
+          <td>×1.3 / -70g</td>
+          <td>spd=10</td>
+        </tr>
+        <tr>
+          <td><span class="speed-pill sp4">Level 4</span></td>
+          <td class="sv">≥ 30（上限 35）</td>
+          <td class="jv">30</td>
+          <td class="gv">-150</td>
+          <td>×1.5 / -70g</td>
+          <td>停止粒子</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert alert-gold" style="margin-top: 16px;">
+      <span>⚠️</span>
+      <div>
+        <span class="ic">enemy.vel</span> 上限為 <strong>35</strong>（<span class="ic">increase_velocity</span> 中有守衛）。
+        開局時呼叫 <span class="ic">enemy.increase_velocity(15, true)</span> 直接設定初始速度，跳過加速邏輯。
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Input ── -->
+  <section id="input">
+    <h2><span class="ico">⌨️</span> 輸入控制系統</h2>
+    <p>
+      <span class="ic">InputManager</span> 維護每個按鍵的三種狀態：
+      <span class="ic">down</span>（持續按住）、
+      <span class="ic">justPressed</span>（本幀剛按下）、
+      <span class="ic">justReleased</span>（本幀剛放開）。
+      每幀調用 <span class="ic">input.update()</span> 重置瞬態狀態。
+    </p>
+
+    <div class="keybind-list" style="margin-top: 20px;">
+      <div class="kb-row">
+        <span class="kb-key">Space</span>
+        <span class="kb-key">↑</span>
+        <div>
+          <div class="kb-desc">跳躍 / 開始遊戲</div>
+          <div class="kb-detail">按住 &gt;0.2s 觸發 Boost，長壓可連跳（落地後若仍按住自動再跳）</div>
+        </div>
+      </div>
+      <div class="kb-row">
+        <span class="kb-key">↓</span>
+        <span class="kb-key">Ctrl</span>
+        <div>
+          <div class="kb-desc">蜷縮 / 快速下墜</div>
+          <div class="kb-detail">地面按住 → 蜷縮姿勢（碰撞箱縮短）；空中按住 → 快速下墜（重力×1.1/幀）</div>
+        </div>
+      </div>
+      <div class="kb-row">
+        <span class="kb-key">Q</span>
+        <div>
+          <div class="kb-desc">Debug 加速</div>
+          <div class="kb-detail">每按一次 +1 速度（僅 debug=true 時啟用）</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Callback 系統</h3>
+    <p>
+      任何模組可透過 <span class="ic">input.addKeyCallback()</span> 監聽按鍵事件，
+      支援 maxCalls 限制（例如開始畫面只觸發一次）：
+    </p>
+<pre><code><span class="cm">// 只觸發一次的 callback（maxCalls=1）</span>
+game.<span class="fn">setStarter</span>(<span class="num">600</span>);
+<span class="cm">// 內部：</span>
+input.<span class="fn">addKeyCallback</span>(<span class="str">'space'</span>, <span class="str">'justPressed'</span>, () => {
+  game.<span class="fn">start</span>();
+}, <span class="num">1</span>); <span class="cm">// 第四參數 maxCalls=1</span>
+</code></pre>
+
+    <h3>WebRTC DataChannel 控制對應</h3>
+    <p>
+      來自 Angular 前端的 P2P 指令，對應遊戲內的按鍵動作：
+    </p>
+    <table class="mgr-table">
+      <thead><tr><th>P2P 指令</th><th>對應按鍵</th><th>效果</th></tr></thead>
+      <tbody>
+        <tr><td class="mn">up</td><td class="mv">space（justPressed）</td><td class="md">觸發跳躍，長按 boost</td></tr>
+        <tr><td class="mn">down</td><td class="mv">down（持續）</td><td class="md">蜷縮或快速下墜</td></tr>
+        <tr><td class="mn">stop</td><td class="mv">（放開所有鍵）</td><td class="md">正常落地，站立姿勢</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ── Assets ── -->
+  <section id="assets">
+    <h2><span class="ico">🧊</span> 資產清單（.vox 體素模型）</h2>
+    <p>
+      所有 3D 模型使用 <strong>MagicaVoxel</strong> (.vox) 格式，
+      透過 <span class="ic">vox.js</span> 解析後轉為 Three.js Mesh。
+    </p>
+
+    <h3>玩家 T-Rex</h3>
+    <div class="asset-grid">
+      <div class="asset-chip"><div class="ac-icon">🦖</div><div class="ac-name">t-rex</div><div class="ac-count">8 幀 奔跑</div></div>
+      <div class="asset-chip"><div class="ac-icon">🎸</div><div class="ac-name">t-rex/band</div><div class="ac-count">8 幀 蜷縮</div></div>
+      <div class="asset-chip"><div class="ac-icon">💀</div><div class="ac-name">wow</div><div class="ac-count">死亡幀</div></div>
+      <div class="asset-chip"><div class="ac-icon">💀</div><div class="ac-name">wow-down</div><div class="ac-count">蜷縮死亡幀</div></div>
+    </div>
+
+    <h3>敵人</h3>
+    <div class="asset-grid">
+      <div class="asset-chip"><div class="ac-icon">🌵</div><div class="ac-name">cactus</div><div class="ac-count">普通</div></div>
+      <div class="asset-chip"><div class="ac-icon">🌵</div><div class="ac-name">cactus_tall</div><div class="ac-count">高型</div></div>
+      <div class="asset-chip"><div class="ac-icon">🌵</div><div class="ac-name">cactus_thin</div><div class="ac-count">細型</div></div>
+      <div class="asset-chip"><div class="ac-icon">🌵</div><div class="ac-name">fcactus ×3</div><div class="ac-count">另 3 變體</div></div>
+      <div class="asset-chip"><div class="ac-icon">🦕</div><div class="ac-name">ptero</div><div class="ac-count">6 幀動畫</div></div>
+    </div>
+
+    <h3>裝飾物（misc）</h3>
+    <div class="asset-grid">
+      <div class="asset-chip"><div class="ac-icon">🌪️</div><div class="ac-name">tumbleweed</div><div class="ac-count">滾動動畫</div></div>
+      <div class="asset-chip"><div class="ac-icon">💀</div><div class="ac-name">desert_skull</div><div class="ac-count">沙漠骷髏</div></div>
+      <div class="asset-chip"><div class="ac-icon">🦂</div><div class="ac-name">scorpion</div><div class="ac-count">蠍子</div></div>
+      <div class="asset-chip"><div class="ac-icon">🪨</div><div class="ac-name">rocks</div><div class="ac-count">5 種岩石</div></div>
+      <div class="asset-chip"><div class="ac-icon">🌸</div><div class="ac-name">flowers</div><div class="ac-count">3 種花</div></div>
+      <div class="asset-chip"><div class="ac-icon">🌲</div><div class="ac-name">trees</div><div class="ac-count">枯樹/綠樹</div></div>
+      <div class="asset-chip"><div class="ac-icon">🐟</div><div class="ac-name">fish</div><div class="ac-count">3 種魚</div></div>
+      <div class="asset-chip"><div class="ac-icon">🌿</div><div class="ac-name">seaweed</div><div class="ac-count">水草</div></div>
+      <div class="asset-chip"><div class="ac-icon">🌵</div><div class="ac-name">cactus/0–5</div><div class="ac-count">6 種裝飾仙人掌</div></div>
+    </div>
+  </section>
+
+  <!-- ── Renderer ── -->
+  <section id="renderer">
+    <h2><span class="ico">🖥️</span> 渲染設定（config-high.js）</h2>
+    <p>
+      渲染設定集中在 <span class="ic">config</span> 物件，
+      分為 <span class="ic">config-high.js</span>（桌機）與 <span class="ic">config-low.js</span>（行動裝置）。
+    </p>
+
+    <table class="mgr-table">
+      <thead><tr><th>設定項</th><th>High 設定值</th><th>說明</th></tr></thead>
+      <tbody>
+        <tr><td class="mn">antialias</td>    <td class="mv">true</td>  <td class="md">WebGL 原生 MSAA 抗鋸齒</td></tr>
+        <tr><td class="mn">shadows</td>      <td class="mv">true</td>  <td class="md">PCFSoftShadowMap 陰影</td></tr>
+        <tr><td class="mn">fog</td>          <td class="mv">true</td>  <td class="md">沙塵霧霾（#E7B251，距離 1~175）</td></tr>
+        <tr><td class="mn">toneMapping</td>  <td class="mv">true</td>  <td class="md">Uncharted2 色調映射</td></tr>
+        <tr><td class="mn">render_at</td>    <td class="mv">1.0</td>   <td class="md">渲染解析度倍率（1 = 全解析度）</td></tr>
+        <tr><td class="mn">postprocessing</td><td class="mv">false</td><td class="md">後處理（SAO）預設關閉</td></tr>
+        <tr><td class="mn">camera.fov</td>   <td class="mv">45°</td>  <td class="md">固定透視角，偏斜角俯視</td></tr>
+        <tr><td class="mn">camera.far</td>   <td class="mv">200</td>  <td class="md">遠裁切面（配合霧距離）</td></tr>
+      </tbody>
+    </table>
+
+    <h3>攝影機座標（固定視角）</h3>
+<pre><code>camera.position.set(<span class="num">7.37</span>, <span class="num">3.43</span>, <span class="num">22.61</span>);
+camera.rotation.set(<span class="num">-0.252</span>, <span class="num">0.563</span>, <span class="num">0.137</span>);
+<span class="cm">// X 俯角 ~14°，Y 偏轉 ~32° — 右後方俯視恐龍</span>
+</code></pre>
+
+    <div class="alert alert-blue">
+      <span>💡</span>
+      <div>
+        後處理 SAO（Scalable Ambient Occlusion）已設計好但預設關閉，
+        啟用方式：在 <span class="ic">config-high.js</span> 中將
+        <span class="ic">postprocessing.enable</span> 和 <span class="ic">postprocessing.sao</span> 改為 <span class="ic">true</span>。
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Audio ── -->
+  <section id="audio">
+    <h2><span class="ico">🎵</span> 音效系統（Howler.js）</h2>
+    <p>
+      使用 <strong>Howler.js</strong> 管理所有音效，
+      支援 .ogg 與 .wav 格式，預先載入（preload）避免播放延遲。
+    </p>
+
+    <table class="mgr-table">
+      <thead><tr><th>音效 ID</th><th>檔案</th><th>觸發時機</th><th>音量</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="mn">bg</td>
+          <td class="mv">Reloaded Games - Music.ogg</td>
+          <td class="md">遊戲開始時播放，loop 循環</td>
+          <td>0.75</td>
+        </tr>
+        <tr>
+          <td class="mn">jump</td>
+          <td class="mv">Jump24.wav</td>
+          <td class="md">每次跳躍（<span class="ic">player.initJump()</span>）</td>
+          <td>0.15</td>
+        </tr>
+        <tr>
+          <td class="mn">score</td>
+          <td class="mv">Pickup_Coin103.wav</td>
+          <td class="md">每 100 分（<span class="ic">score.flash()</span>）</td>
+          <td>0.3</td>
+        </tr>
+        <tr>
+          <td class="mn">highest_score</td>
+          <td class="mv">Powerup33.wav</td>
+          <td class="md">超越歷史最高分時（一局只響一次）</td>
+          <td>0.4</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert alert-green">
+      <span>🔇</span>
+      <div>
+        <strong>首次互動解鎖</strong>：瀏覽器政策要求使用者必須先有互動（點擊）才能播放音效。
+        index.html 使用「點擊啟用 AI 語音與音效」初始化覆蓋頁解決此問題。
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Particles ── -->
+  <section id="particles">
+    <h2><span class="ico">✨</span> 粒子特效（Three.js Nebula）</h2>
+    <p>
+      腳步塵土效果使用 <strong>three-nebula</strong> 粒子庫，
+      速度越快粒子越多越激烈，最高速度時完全停止（因為速度太快看不見）。
+    </p>
+
+<pre><code><span class="cm">// 建立腳步塵土 Emitter</span>
+<span class="kw">function</span> <span class="fn">nebulaCreateDynoDustEmitter</span>(spd = <span class="num">5</span>) {
+  <span class="kw">const</span> emitter = <span class="kw">new</span> <span class="type">Nebula.Emitter</span>();
+
+  <span class="cm">// 發射速率：每 0.1~0.25s 發射 1~2 個粒子</span>
+  emitter.rate = <span class="kw">new</span> <span class="type">Nebula.Rate</span>(
+    <span class="kw">new</span> <span class="type">Nebula.Span</span>(<span class="num">1</span>, <span class="num">2</span>),
+    <span class="kw">new</span> <span class="type">Nebula.Span</span>(<span class="num">0.1</span>, <span class="num">0.25</span>)
+  );
+
+  <span class="cm">// 初始化：質量 10、半徑 0.1、壽命 1~3 秒</span>
+  emitter.<span class="fn">addInitializer</span>(<span class="kw">new</span> <span class="type">Nebula.Radius</span>(<span class="num">.1</span>));
+  emitter.<span class="fn">addInitializer</span>(<span class="kw">new</span> <span class="type">Nebula.Life</span>(<span class="num">1</span>, <span class="num">3</span>));
+
+  <span class="cm">// 行為：隨機旋轉、從大縮小（2→0.1）、框內邊界反彈</span>
+  emitter.<span class="fn">addBehaviour</span>(<span class="kw">new</span> <span class="type">Nebula.Rotate</span>(<span class="str">'random'</span>, <span class="str">'random'</span>));
+  emitter.<span class="fn">addBehaviour</span>(<span class="kw">new</span> <span class="type">Nebula.Scale</span>(<span class="num">2</span>, <span class="num">0.1</span>));
+
+  <span class="cm">// 位置：恐龍腳下 (0, -1.1, 15.5)</span>
+  emitter.position.set(<span class="num">0</span>, <span class="num">-1.1</span>, <span class="num">15.5</span>);
+}
+</code></pre>
+
+    <table class="mgr-table">
+      <thead><tr><th>速度等級</th><th>粒子速度 (spd)</th><th>狀態</th></tr></thead>
+      <tbody>
+        <tr><td><span class="speed-pill sp1">開始</span></td>  <td class="mv">4</td>  <td class="md">輕微塵土</td></tr>
+        <tr><td><span class="speed-pill sp2">Level 2</span></td><td class="mv">7</td>  <td class="md">明顯塵土，重新建立 emitter</td></tr>
+        <tr><td><span class="speed-pill sp3">Level 3</span></td><td class="mv">10</td> <td class="md">激烈塵土，重新建立 emitter</td></tr>
+        <tr><td><span class="speed-pill sp4">Level 4</span></td><td class="mv">停止</td><td class="md">emitter.dead=true，不再發射</td></tr>
+      </tbody>
+    </table>
+
+    <div class="alert alert-gold">
+      <span>💡</span>
+      <div>
+        跳躍時 <span class="ic">dynoDustEmitter.stopEmit()</span>（離地），
+        落地時 <span class="ic">dynoDustEmitter.emit()</span>（恢復），
+        視覺上模擬腳著地瞬間揚起的塵土。
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  3D Dino 遊戲說明文件 ·
+  <a href="https://threejs.org" target="_blank">Three.js 官方文件</a> ·
+  <a href="https://howlerjs.com" target="_blank">Howler.js 官方文件</a> ·
+  <a href="https://github.com/creativelifeform/three-nebula" target="_blank">three-nebula GitHub</a>
+</footer>
+
+</body>
+</html>
